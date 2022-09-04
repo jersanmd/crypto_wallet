@@ -6,31 +6,56 @@ import {
 import { SIZES, COLORS, FONTS, dummyData, icons } from '../constants';
 
 import MainLayout  from './MainLayout'
+import { BalanceInfo } from '../components';
+import holdings from '../constants/dummy';
 
 import { connect } from 'react-redux'
 import { getHoldings, getCoinMarket } from '../stores/market/marketActions'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-
 const Home = ({getHoldings, getCoinMarket, myHoldings, coins}) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            getHoldings(holdings = dummyData.holdings)
+            getHoldings(dummyData.holdings)
             getCoinMarket()
         }, [])
     )
+    
+    let totalWallet = myHoldings.reduce((a, b) => a + (b.total || 0), 0)
+
+    function renderWalletInfoSection() {
+        return (
+            <View
+                style={{
+                    paddingHorizontal: SIZES.padding,
+                    borderBottomLeftRadius: 25,
+                    borderBottomRightRadius: 25,
+                    backgroundColor: COLORS.gray
+                }}
+            > 
+                <BalanceInfo
+                    title="Your Wallet"
+                    displayAmount={totalWallet}
+                    changePct={2.30}
+                    containerStyle = {{
+                        marginTop: 50
+                    }}
+                ></BalanceInfo>
+            </View>
+        )
+    }
 
     return (
         <MainLayout>
             <View
                 style={{
-                    backgroundColor: COLORS.white,
-                    height: '100%'
+                    flex: 1,
+                    backgroundColor: COLORS.black,
                 }}    
             >
-                <Text>Home</Text>
+                {renderWalletInfoSection()}
             </View>
         </MainLayout>
     )
@@ -38,7 +63,7 @@ const Home = ({getHoldings, getCoinMarket, myHoldings, coins}) => {
 
 function mapStateToProps(state) {
     return {
-        myHoldings: state.marketReducer.holdings,
+        myHoldings: state.marketReducer.myHoldings,
         coins: state.marketReducer.coins
     }
 }

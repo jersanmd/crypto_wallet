@@ -38,9 +38,8 @@ export function getHoldings(holdings = [], currency = 'usd', orderBy = 'market_c
                 Accept: 'application/json'
             }
         }).then((response) => {
-            console.log("Get Holdings")
-            console.log(response)
-            if(response.state == 200) {
+            if(response.status == 200) {
+                // console.log(response.data)
                 let myHoldings = response.data.map((item) => {
                     let coin = holdings.find(a => a.id == item.id)
 
@@ -53,19 +52,21 @@ export function getHoldings(holdings = [], currency = 'usd', orderBy = 'market_c
                         image: item.image,
                         current_price: item.current_price,
                         qty: coin.qty,
-                        total: coin.qty * item.current.price,
+                        total: coin.qty * item.current_price,
                         price_change_percentage_7d_in_currency: item.price_change_percentage_7d_in_currency,
                         holding_value_change_7d: (item.current_price - price7d) * coin.qty,
-                        sparkline_in_7d: { 
-                            value: item.sparkline_in_7d.map(
+                        sparkline_in_7d: {
+                            value: item.sparkline_in_7d.price.map (
                                 (price) => {
-                                    return price*coin.qty
+                                    return price * coin.qty
                                 }
                             )
-                        }
+                        }            
                     }
+                    
                 })
-
+                // console.log(myHoldings)
+                
                 dispatch(getHoldingsSuccess(myHoldings))
 
             } else {
@@ -105,9 +106,9 @@ export function getCoinMarket(currency = 'usd', orderBy = 'market_cap_desc', spa
                 Accept: 'application/json'
             }
         }).then((response) => {
-            console.log("GetCoinMarket")
-            console.log(response)
-            if(response.data == 200) {
+            // console.log("GetCoinMarket")
+            // console.log(response)
+            if(response.status == 200) {
                 dispatch(getCoinMarketSucess(response.data))
             } else {
                 dispatch(getCoinMarketFailure(response.data))
