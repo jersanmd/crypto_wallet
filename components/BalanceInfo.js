@@ -40,7 +40,7 @@ const BalanceInfo = ({title, displayAmount, changePct, containerStyle}) => {
                    ...FONTS.h2,
                    color: COLORS.white 
                 }}
-            >{displayAmount.toLocaleString()}</Text>
+            >{displayAmount.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
             <Text
                 style={{
                     marginLeft: 4,
