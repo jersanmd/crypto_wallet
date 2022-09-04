@@ -1,20 +1,51 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import { useFonts } from 'expo-font'
 
-export default function App() {
+import { createStore, applyMiddleware } from "redux"
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import rootReducer from './stores/root/rootReducer'
+
+import Tabs from './navigation/tabs'
+
+const Stack = createStackNavigator();
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+)
+
+const App = () => {
+
+  const [loaded] = useFonts({
+    RobotoBlack: require('./assets/fonts/Roboto-Black.ttf'),
+    RobotoBold: require('./assets/fonts/Roboto-Bold.ttf'),
+    RobotoRegular: require('./assets/fonts/Roboto-Regular.ttf')
+  });
+
+  if(!loaded) return null;
+
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false
+          }}
+          initialRouteName={'MainLayout'}
+        >
+          <Stack.Screen 
+            name="MainLayout"
+            component={Tabs}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+    
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
