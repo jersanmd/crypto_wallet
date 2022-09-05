@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 
+
 import { createStore, applyMiddleware } from "redux"
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'

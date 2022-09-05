@@ -6,7 +6,7 @@ import {
 import { SIZES, COLORS, FONTS, dummyData, icons } from '../constants';
 
 import MainLayout  from './MainLayout'
-import { BalanceInfo, IconTextButton } from '../components';
+import { BalanceInfo, IconTextButton, Chart } from '../components';
 import holdings from '../constants/dummy';
 
 import { connect } from 'react-redux'
@@ -86,6 +86,13 @@ const Home = ({getHoldings, getCoinMarket, myHoldings, coins}) => {
                 }}    
             >
                 {renderWalletInfoSection()}
+
+                <Chart 
+                    containerStyle = {{
+                        marginTop: SIZES.padding * 2
+                    }}
+                    chartPrices = {coins[0]?.sparkline_in_7d?.price}
+                />
             </View>
         </MainLayout>
     )
